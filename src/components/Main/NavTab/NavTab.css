@@ -1,0 +1,24 @@
+.navtab {
+  background-color: black;
+  height: 66px;
+  display: flex;
+  justify-content: center;
+}
+
+.navtab__button {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  text-decoration-line: underline;
+  margin: 0 40px 0 0;
+  color: #ffffff;
+  display: flex;
+  align-items:center;
+  justify-content: center;
+}
+
+.navtab__button:last-child {
+    margin: 0;
+}

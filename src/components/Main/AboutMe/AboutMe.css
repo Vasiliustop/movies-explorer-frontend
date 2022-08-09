@@ -1,0 +1,83 @@
+.aboutme {
+  background-color: white;
+  margin: 110px 70px 100px;
+}
+
+.aboutme__content {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+}
+
+.aboutme__information {
+  max-width: 600px;
+}
+
+.aboutme__title {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  letter-spacing: -0.04em;
+  border-bottom: 1px solid black;
+  padding-bottom: 23px;
+  margin: 0;
+}
+
+.aboutme__photo {
+  width: 270px;
+  height: 327px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin: 66px 0 0 0;
+}
+
+.aboutme__name {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 58px;
+  letter-spacing: -0.04em;
+  margin: 66px 0 18px 0;
+}
+
+.aboutme__subtitle {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  margin: 0 0 26px 0;
+}
+
+.aboutme__description {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  margin: 0 0 99px 0;
+}
+
+.aboutme__list-link {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+}
+
+.aboutme__link {
+  margin: 0;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-decoration: none;
+  color: #000000;
+}
+
+.aboutme__link:first-child {
+  margin: 0 20px 0 0;
+}
