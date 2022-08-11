@@ -34,35 +34,33 @@ export default function Navigation() {
       ></button>
       {isOpenBurger ? (
         <div className="movies-navigation__burger-menu">
-            <div className="movies-navigation-burger-menu_content">
-              <div className="movies-navigation__links">
-                <button
-                  className="movies-navigation__burger-menu_close"
-                  onClick={handleCloseBurger}
-                ></button>
-                <Link
-                  to="/"
-                  className="movies-navigation__movies text-decoration_underline"
-                >
-                  Главная
-                </Link>
-                <Link
-                  to="/movies"
-                  className="movies-navigation__movies text-decoration_underline"
-                >
-                  Фильмы
-                </Link>
-                <Link
-                  to="/saved-movies"
-                  className="movies-navigation__movies text-decoration_underline"
-                >
-                  Сохраненные фильмы
-                </Link>
-                
-              </div>
-              <Link to="/profile" className="account__button"></Link>
+          <div className="movies-navigation-burger-menu_content">
+            <div className="movies-navigation__links">
+              <button
+                className="movies-navigation__burger-menu_close"
+                onClick={handleCloseBurger}
+              ></button>
+              <Link
+                to="/"
+                className="movies-navigation__movies text-decoration_underline"
+              >
+                Главная
+              </Link>
+              <Link
+                to="/movies"
+                className="movies-navigation__movies text-decoration_underline"
+              >
+                Фильмы
+              </Link>
+              <Link
+                to="/saved-movies"
+                className="movies-navigation__movies text-decoration_underline"
+              >
+                Сохраненные фильмы
+              </Link>
             </div>
-          
+            <Link to="/profile" className="account__button"></Link>
+          </div>
         </div>
       ) : (
         ""

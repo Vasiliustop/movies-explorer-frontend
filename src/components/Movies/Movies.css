@@ -10,7 +10,22 @@
   background: #F9F9F9;
   border-radius: 6px;
   margin: 0 auto;
-  width: 1140px;
+  width: 1139px;
   height: 36px;
   cursor: pointer;
+}
+
+@media screen and (max-width: 1155px) {
+  .movies__next-button  {
+      width: 708px;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .movies__next-button  {
+      width: 300px;
+  }
+
+  
 }

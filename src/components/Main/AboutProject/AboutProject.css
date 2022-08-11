@@ -9,13 +9,12 @@
 }
 
 .about-project__title {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 22px;
   line-height: 27px;
   color: black;
-  padding-top: 160px;
+  padding-top: 110px;
   padding-bottom: 23px;
   border-bottom: 1px solid black;
   letter-spacing: -0.04em;
@@ -94,4 +93,64 @@
   line-height: 17px;
   text-align: center;
   color: #a0a0a0;
+}
+
+@media screen and (max-width: 1155px) {
+  .about-project__title {
+    padding-top: 90px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .about-project {
+    background-color: white;
+    margin: 0 18px 70px;
+  }
+
+  .about-project__heading {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .about-project__content {
+    flex-direction: column;
+  }
+
+  .about-project__info {
+    margin: 0 0 56px;
+  }
+
+  .about-project__info:last-child {
+    margin: 0 0 60px;
+  }
+
+  .about-project__text {
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .about-project__title {
+    font-size: 18px;
+    line-height: 22px;
+    margin: 0 0 60px 0;
+  }
+
+  .about-project__heading {
+    margin: 0 0 16px 0;
+  }
+
+  .about-project__duration-backend {
+    font-size: 11px;
+    line-height: 13px;
+  }
+
+  .about-project__duration-frontend {
+    font-size: 11px;
+    line-height: 13px;
+  }
+
+  .about-project__duration-text {
+    font-size: 11px;
+    line-height: 13px;
+  }
 }

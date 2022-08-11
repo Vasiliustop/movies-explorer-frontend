@@ -67,3 +67,23 @@
   color: #ff3055;
   text-decoration: none;
 }
+
+
+@media screen and (max-width: 768px)  {
+
+  .profile {
+    max-width: 260px;
+  }
+
+
+
+  .profile__button {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .profile__link {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

@@ -14,7 +14,6 @@
 }
 
 .aboutme__title {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 22px;
@@ -34,7 +33,6 @@
 }
 
 .aboutme__name {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 50px;
@@ -44,7 +42,6 @@
 }
 
 .aboutme__subtitle {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
@@ -53,7 +50,6 @@
 }
 
 .aboutme__description {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -65,6 +61,7 @@
   display: flex;
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .aboutme__link {
@@ -80,4 +77,56 @@
 
 .aboutme__link:first-child {
   margin: 0 20px 0 0;
+}
+
+@media screen and (max-width: 1155px) {
+  .aboutme__photo {
+    width: 255px;
+    height: 307px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+
+  .aboutme {
+    margin: 70px 14px 69px;
+  }
+
+  .aboutme__content {
+    flex-direction: column;
+  }
+
+  .aboutme__title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .aboutme__name {
+    margin: 40px 0 20px 0;
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  .aboutme__subtitle {
+    font-size: 11px;
+    line-height: 16px;
+    margin: 0 0 20px 0;
+  }
+
+  .aboutme__description {
+    font-size: 11px;
+   line-height: 16px;
+   margin: 0 0 40px 0;
+  }
+
+  .aboutme__photo {
+    width: 292px;
+    height: 352px;
+    margin-top: 60px;
+  }
+
+  .aboutme__link:first-child {
+    margin: 0 26px 0 0;
+  }
+
 }

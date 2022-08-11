@@ -5,7 +5,6 @@ export default function Footer() {
         Учебный проект Яндекс.Практикум х BeatFilm.
       </p>
       <div className="footer__container">
-        <p className="footer__copyright">&copy; {new Date().getFullYear()}</p>
         <ul className="footer__list">
           <li className="footer__item">
             <a href="https://practicum.yandex.ru" className="footer__link">
@@ -23,6 +22,7 @@ export default function Footer() {
             </a>
           </li>
         </ul>
+        <p className="footer__copyright">&copy; {new Date().getFullYear()}</p>
       </div>
     </footer>
   );

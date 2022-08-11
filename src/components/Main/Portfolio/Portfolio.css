@@ -25,11 +25,10 @@
 }
 
 .portfolio__list-item:last-child {
-    border-bottom: 0px;
+  border-bottom: 0px;
 }
 
 .portfolio__list-link {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 30px;
@@ -40,4 +39,21 @@
   padding-bottom: 19px;
   margin: 0;
   cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+
+  .portfolio {
+    margin: 0 14px 149px;
+  }
+
+  .portfolio__title {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0 0 40px 0;
+  }
+  .portfolio__list-link {
+    font-size: 18px;
+    line-height: 28px;
+  }
 }
