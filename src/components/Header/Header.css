@@ -1,0 +1,21 @@
+.header {
+  display: flex;
+  align-items: center;
+  max-width: 1280px;
+  width: 100%;
+  height: 74px;
+  box-sizing: border-box;
+  background-color: #073042;
+  margin: auto;
+}
+
+.header_type_auth {
+  padding: 0 30px 0 30px;
+}
+
+@media screen and (max-width: 768px) {
+  .header_type_auth {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+}
