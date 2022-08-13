@@ -125,6 +125,7 @@
     bottom: 0;
     display: flex;
     justify-content: flex-end;
+    z-index: 999;
   }
 
   .movies-navigation__burger-button {

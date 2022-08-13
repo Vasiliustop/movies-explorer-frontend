@@ -30,7 +30,6 @@
 }
 
 .about-project__heading {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
@@ -40,7 +39,6 @@
 }
 
 .about-project__text {
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -51,6 +49,7 @@
 .about-project__duration {
   display: grid;
   grid-template-columns: 1fr 4fr;
+  width: 100%;
 }
 
 .about-project__backend {
@@ -60,8 +59,8 @@
 .about-project__duration-backend {
   background: #3ddc84;
   color: #000000;
-  height: 36px;
   box-sizing: border-box;
+  font-weight: 400;
   font-size: 14px;
   line-height: 17px;
   padding: 10px 10px;
@@ -74,7 +73,6 @@
 .about-project__duration-frontend {
   max-width: 912px;
   background-color: #f2f2f2;
-  font-family: "Inter";
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -86,7 +84,6 @@
 
 .about-project__duration-text {
   margin: 14px 0 0 0;
-  font-family: "Inter";
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -116,6 +113,11 @@
     flex-direction: column;
   }
 
+  .about-project__duration {
+    grid-template-columns: minmax(100px, 2fr) minmax(184px, 3fr);
+ 
+   }
+
   .about-project__info {
     margin: 0 0 56px;
   }
@@ -142,11 +144,13 @@
   .about-project__duration-backend {
     font-size: 11px;
     line-height: 13px;
+    padding: 11px 10px;
   }
 
   .about-project__duration-frontend {
     font-size: 11px;
     line-height: 13px;
+    padding: 11px 10px;
   }
 
   .about-project__duration-text {

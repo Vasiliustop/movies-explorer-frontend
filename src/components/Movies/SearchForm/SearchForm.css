@@ -19,19 +19,23 @@
   margin: 80px 0 30px;
 }
 
-
-
 .search-form__input {
   height: 48px;
   background: #f9f9f9;
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;
-  padding: 0 ;
+  padding: 0;
   outline: none;
   border: none;
   width: calc(100% - 80px);
   border-radius: 4px;
+  padding-left: 22px;
+  box-sizing: border-box;
+}
+
+.search-form__input:focus {
+  border-bottom: 1px solid #3456f3;
 }
 
 .search-form__button {
