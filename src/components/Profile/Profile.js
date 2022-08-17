@@ -1,24 +1,70 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { CurrentUserContext } from "../../context/CurrentUserContext";
 
-export default function Profile() {
+export default function Profile({onLogout, onSubmit, currentUser}) {
+
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  function handleChangeName(evt) {
+      const input = evt.target;
+      setUserName(input.value);
+    }
+
+  function handleChangeEmail(evt) {
+      const input = evt.target;
+      setUserEmail(input.value);
+  }
+
+  function handleSubmit(e) {
+      e.preventDefault();
+      onSubmit({email: userEmail, name: userName});
+    }
+
+  useEffect(() => {
+
+    console.log(currentUser.email)
+    console.log(currentUser.name)
+      setUserName(currentUser.name);
+      setUserEmail(currentUser.email);
+  }, [currentUser]);
+
+  // useEffect(() => {}, [currentUser, userName, userEmail]);
+
   return (
+    <CurrentUserContext.Provider value={currentUser}>
     <section className="profile">
-      <h2 className="profile__title">Привет, Василий!</h2>
       <div className="profile__container">
-        <p className="profile__field">
-          <span>Имя</span>
-          <span>Василий</span>
-        </p>
-        <p className="profile__field">
-          <span>E-mail</span>
-          <span>vasiliy@yandex.ru</span>
-        </p>
-      </div>
-      <div className="profile__buttons">
-        <button type="button" className="profile__button">Редактировать</button>
-        <NavLink className="profile__link" to={"/signin"}>Выйти из аккаунта</NavLink>
+        <h3 className="profile__title">Привет, {userName}!</h3>
+        <form className="profile__form" onSubmit={handleSubmit}  >
+          <div className="profile_form-inputs">
+            <p className="profile__text">Имя</p>
+            <input
+              className="profile__input"
+              type="text"
+              required
+              value={userName || ''}
+              onChange={handleChangeName}
+            />
+            <p className="profile__text">Email</p>
+            <input
+              className="profile__input"
+              type="email"
+              required
+              value={userEmail || ''}
+              onChange={handleChangeEmail}
+            />
+          </div>
+          <div className="profile__buttons">
+            <button className="profile__button" type="submit" onSubmit={onSubmit}>Редактировать</button>
+            <button className="profile__link" type="button" onClick={onLogout}>
+              Выйти из аккаунта
+            </button>
+          </div>
+        </form>
       </div>
     </section>
+    </CurrentUserContext.Provider>
   );
 }
