@@ -7,14 +7,17 @@ export default function Profile({onLogout, onSubmit, currentUser}) {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
+
   function handleChangeName(evt) {
       const input = evt.target;
       setUserName(input.value);
+     
     }
 
   function handleChangeEmail(evt) {
       const input = evt.target;
       setUserEmail(input.value);
+     
   }
 
   function handleSubmit(e) {
@@ -23,14 +26,11 @@ export default function Profile({onLogout, onSubmit, currentUser}) {
     }
 
   useEffect(() => {
-
-    console.log(currentUser.email)
-    console.log(currentUser.name)
       setUserName(currentUser.name);
       setUserEmail(currentUser.email);
   }, [currentUser]);
 
-  // useEffect(() => {}, [currentUser, userName, userEmail]);
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -46,6 +46,7 @@ export default function Profile({onLogout, onSubmit, currentUser}) {
               required
               value={userName || ''}
               onChange={handleChangeName}
+              id='profile-name'
             />
             <p className="profile__text">Email</p>
             <input
@@ -54,6 +55,7 @@ export default function Profile({onLogout, onSubmit, currentUser}) {
               required
               value={userEmail || ''}
               onChange={handleChangeEmail}
+              id='profile-email'
             />
           </div>
           <div className="profile__buttons">

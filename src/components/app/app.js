@@ -18,6 +18,7 @@ import * as MainApi from "../../utils/MainApi"
 export default function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [savedMovies, setSavedMovies] = useState([]);
   const location = useLocation();
   const history = useHistory();
 
@@ -27,10 +28,88 @@ export default function App() {
     checkToken();
   }, []);
   
+  
+  
+  
+  
+  useEffect(() => {
+    if (isLoggedIn) {
+      if (localStorage.getItem('savedMovies')) {
+        setSavedMovies((JSON.parse(localStorage.getItem('savedMovies'))));
+      } else {
+        getSavedMovies();
+      }
+    }
+  }, [isLoggedIn])
+  
+  
+  function getSavedMovies() {
+   
+    MainApi.getSavedMovies()
+      .then(data => {
+        updateSavedMovies(data);
+      })
+      .catch(err => {
+        console.log("JJJKKKGET")
+      })
+  }
+
+  function updateSavedMovies(savedMovies) {
+    setSavedMovies(savedMovies);
+    localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
+  }
+
+  function onMovieSave(movie) {
+    const isSaved = savedMovies?.some(i => i.movieId === movie.id);
+   
+    if (!isSaved) {
+      MainApi
+        .saveMovie(movie)
+        .then((newMovie) => {
+          updateSavedMovies([newMovie, ...savedMovies])
+        
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+    } else {
+      const id = savedMovies.find(item => item.movieId === movie.id)._id;
+      MainApi
+        .deleteMovie(id)
+        .then(() => {
+          updateSavedMovies(savedMovies.filter(movie => movie._id === id ? null : movie));
+       
+        })
+        .catch((err) => {
+         console.log(err)
+        })
+    }
+  }
+
+  function onMovieDel(movie) {
+   
+    const id = movie._id;
+    MainApi
+      .deleteMovie(id)
+      .then(() => {
+        updateSavedMovies(savedMovies.filter(movie => movie._id === id ? null : movie));
+     
+      })
+      .catch((err) => {
+       console.log(err)
+      })
+  }
+
+
+
+
+
+
+
   const handleRegister = (name, email, password) => {
     Auth.register(name, email, password)
       .then((res) => {
-        handleLogin ()
+        handleLogin (email, password)
      })
       .catch((err) => {
         console.log("err", err);
@@ -79,13 +158,11 @@ const handleLogout = () => {
     history.push("/");
   };
 
-
-  
  return (
     <CurrentUserContext.Provider value={currentUser}>
       <Switch>
         <Route exact path="/">
-          <Header loggedIn={false}/>
+          <Header loggedIn={isLoggedIn}/>
           <Main />
           <Footer />
         </Route>
@@ -105,12 +182,16 @@ const handleLogout = () => {
       
 
       <ProtectedRoute isLoggedIn={isLoggedIn}  path="/movies">
-      <Header loggedIn={true}  />
-        <Movies isLoggedIn={isLoggedIn} />
+      <Header loggedIn={isLoggedIn}  />
+        <Movies loggedIn={isLoggedIn} 
+             onMovieSave={onMovieSave}
+             savedMovies={savedMovies}
+        
+         />
       </ProtectedRoute>
 
       <ProtectedRoute isLoggedIn={isLoggedIn}  path="/profile">
-      <Header loggedIn={true}  />
+      <Header loggedIn={isLoggedIn}  />
         <Profile   onSubmit={handleChangeProfile}
                    onLogout={handleLogout}
                    currentUser={currentUser}
@@ -119,8 +200,14 @@ const handleLogout = () => {
       </ProtectedRoute>
 
       <ProtectedRoute isLoggedIn={isLoggedIn}  path="/saved-movies">
-      <Header  loggedIn={true}  />
-        <SavedMovies />
+      <Header  loggedIn={isLoggedIn}  />
+        <SavedMovies 
+          component={SavedMovies}
+          movies={savedMovies}
+          getMovies={getSavedMovies}
+          onMovieDel={onMovieDel}
+        
+        />
       </ProtectedRoute>
 
       

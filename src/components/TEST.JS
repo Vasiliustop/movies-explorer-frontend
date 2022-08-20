@@ -1,107 +1,65 @@
-import "./Profile.css";
-import React from "react";
-import Header from "../Header/Header";
-import {Link, useNavigate} from "react-router-dom";
-import {CurrentUserContext} from '../../context/CurrentUserContext';
-import InfoToolTip from "../InfoTooltip/InfoTooltip";
-import validator from "validator";
+import React from 'react';
+import './MoviesCard.css'
+import { useLocation } from "react-router-dom";
 
-function Profile({onLogout, onSubmit, currentUser}) {
-    const [userName, setUserName] = React.useState("");
-    const [userEmail, setUserEmail] = React.useState("");
-    const [isValidName, setIsValidName] = React.useState(true);
-    const [isValidEmail, setIsValidEmail] = React.useState(true);
-    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
-    const history = useNavigate();
+function MoviesCard({ movie, savedMovies, onMovieSave, onMovieDel, onClicPopupOpen }) {
+  const duration = `${Math.trunc(movie.duration / 60)}ч ${movie.duration % 60}м`;
+  const path = useLocation();
+  const isSaved = savedMovies?.some(i => i.movieId === movie.id)
 
-    function handleChangeName(e) {
-        const input = e.target;
-        setUserName(input.value);
-        setIsValidName(e.target.validity.valid);
-    }
+  function handleSaveClick() {
+    onMovieSave(movie);
+  }
 
-    function handleChangeEmail(e) {
-        const input = e.target;
-        setUserEmail(input.value);
-        setIsValidEmail(e.target.validity.valid && validator.isEmail(e.target.value));
-    }
+  function handleDelClick() {
+    onMovieDel(movie);
+  }
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        onSubmit({email: userEmail, name: userName});
-        setIsInfoTooltipOpen(true);
-    }
+  function handlePopupOpen() {
+    onClicPopupOpen(movie)
+  }
 
-    function handleClose() {
-        setIsInfoTooltipOpen(false);
-        history('/profile');
-    }
+  return (
+    <article className="movies-card">
+      <div className="movies-card__title-container">
+        <div className="movies-card__text">
+          <h2 className="movies-card__title">{movie.nameRU}</h2>
+          <span className="movies-card__duration">{duration}</span>
+        </div>
 
-    React.useEffect(() => {
-        setUserName(currentUser.name);
-        setUserEmail(currentUser.email);
-    }, [currentUser]);
-
-    React.useEffect(() => {
-        const editButton = document.querySelector(".profile__edit-button");
-        if (((userName !== currentUser.name) || (userEmail !== currentUser.email))
-            &&isValidName && isValidEmail){
-            editButton.classList.remove("profile__edit-button_disabled");
-        } else {
-            editButton.classList.add("profile__edit-button_disabled");
+        {path.pathname === "/movies" &&
+          (<label className="movies-card__favorite-container">
+            <input
+              aria-label="Добавить в избранное"
+              type="checkbox"
+              className="movies-card__favorite-btn-hide"
+              id={movie.id}
+              onChange={handleSaveClick}
+            />
+            <span className={`movies-card__favorite-btn ${isSaved && 'movies-card__favorite-btn_is_saved'}`}/>
+          </label>)
         }
-    }, [currentUser, userName, userEmail, isValidEmail, isValidName]);
 
-    return (
-        <CurrentUserContext.Provider value={currentUser}>
-            <Header loggedIn={true}/>
-            <main className="profile">
-                <div className="profile__container">
-                    <h1 className="profile__heading">Привет, {userName}!</h1>
-                    <form className="profile__form" onSubmit={handleSubmit}>
-                        <div className="profile__input-container">
-                            <label className="profile__lable">Имя</label>
-                            <input
-                                className="profile__input"
-                                type="text"
-                                name="name"
-                                minLength="2"
-                                maxLength="40"
-                                required
-                                value={userName || ''}
-                                onChange={handleChangeName}
-                            />
-                        </div>
-                        <div className="profile__input-container">
-                            <label className="profile__lable">E-mail</label>
-                            <input
-                                className="profile__input"
-                                type="email"
-                                name="email"
-                                minLength="2"
-                                maxLength="40"
-                                required
-                                value={userEmail || ''}
-                                onChange={handleChangeEmail}
-                            />
-                        </div>
-                        <button type="submit"
-                                onSubmit={onSubmit}
-                                className="profile__edit-button profile__edit-button_disabled">
-                            Редактировать
-                        </button>
-                    </form>
-                    <Link to="/signin" onClick={onLogout} className="profile__logout">
-                        Выйти из аккаунта
-                    </Link>
-                </div>
-                <InfoToolTip
-                    status={true}
-                    isOpen={isInfoTooltipOpen}
-                    closePopup={handleClose}/>
-            </main>
-        </CurrentUserContext.Provider>
-    )
+        {path.pathname === "/saved-movies" &&
+          (<div className="movies-card__del">
+            <button
+              aria-label="Удалить из избранного"
+              type="button"
+              className="movies-card__del-btn"
+              id={movie.id}
+              onClick={handleDelClick}
+            />
+          </div>)
+        }
+      </div>
+      <img className="movies-card__image"
+        src={path.pathname === '/movies' ?
+          `https://api.nomoreparties.co${movie.image.url}`
+          : movie.image}
+        alt={movie.nameRU}
+        onClick={handlePopupOpen} />
+    </article>
+  )
 }
 
-export default Profile;
+export default MoviesCard;

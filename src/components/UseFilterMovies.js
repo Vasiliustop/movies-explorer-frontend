@@ -7,24 +7,24 @@ export function UseFilterMovies(movies, initialStateRender, getFilm) {
 
   useEffect(() => {
     console.log("useEffect")
-    updateFilteredMovies(JSON.parse(localStorage.getItem("beatFilmFilteredMovies") || '[]'));
-    updateInputSearch(localStorage.getItem("beatFilmInputSearch") || '');
-    updateShort(JSON.parse(localStorage.getItem("beatFilmShort")));
+    updateFilteredMovies(JSON.parse(localStorage.getItem("filmFilteredMovies") || '[]'));
+    updateInputSearch(localStorage.getItem("filmInputSearch") || '');
+    updateShort(JSON.parse(localStorage.getItem("filmShort")));
   }, []);
 
   function updateFilteredMovies(filteredMovies) {
     setFilteredMovies(filteredMovies);
-    localStorage.setItem("beatFilmFilteredMovies", JSON.stringify(filteredMovies));
+    localStorage.setItem("filmFilteredMovies", JSON.stringify(filteredMovies));
   }
 
   function updateInputSearch(inputSearch) {
     setInputSearch(inputSearch);
-    localStorage.setItem("beatFilmInputSearch", inputSearch);
+    localStorage.setItem("filmInputSearch", inputSearch);
   }
 
   function updateShort(short) {
     setShort(short);
-    localStorage.setItem("beatFilmShort", JSON.stringify(short));
+    localStorage.setItem("filmShort", JSON.stringify(short));
   }
 
   function handleInputChange(evt) {
@@ -35,6 +35,7 @@ export function UseFilterMovies(movies, initialStateRender, getFilm) {
     if (input.length === 0 && !initialStateRender) {
       !initialStateRender && updateFilteredMovies([]);
     } else {
+      
       updateFilteredMovies(movies
         .filter(({
           nameRU,
@@ -56,6 +57,7 @@ export function UseFilterMovies(movies, initialStateRender, getFilm) {
       getFilm();
     } else {
       filterMovies(movies, inputSearch, short);
+      
     }
 
   }

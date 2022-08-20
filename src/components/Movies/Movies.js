@@ -1,24 +1,28 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { useLocation } from 'react-router-dom';
 import SearchForm from "./SearchForm/SearchForm";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import Footer from "./../Footer/Footer";
 import Preloader from "./Preloader/Preloader";
-import * as MoviesApi from "../../utils/MoviesApi"
-import { UseFilterMovies } from '../UseFilterMovies.js';
+import * as MoviesApi from "../../utils/MoviesApi";
+import { UseFilterMovies } from "../UseFilterMovies.js";
+import { useScreenWidthBinding } from '../useScreenWidthBinding';
 
-export default function Movies({ loggedIn,
+export default function Movies({
+  
+  loggedIn,
   savedMovies,
   onMovieSave,
   isMenuOpen,
   onClicOpen,
   onClicPopupOpen,
-  onClickCloseMenu }) {
-  
-  const [isLoading, setIsLoading] = useState(false);
+  onClickCloseMenu,
+}) {
+
   const [beatFilmMovies, setBeatFilmMovies] = useState([]);
   const [showPreloader, setShowPreloader] = useState(false);
-  const [isSearchError, setIsSearchError] = useState(false);
+  const [searchError, setSearchError] = useState(false);
 
   const {
     short,
@@ -28,69 +32,76 @@ export default function Movies({ loggedIn,
     handleInputChange,
     onSubmitSearch,
     filterMovies,
-  } = UseFilterMovies(beatFilmMovies, false, getMoviesBeatfilm);
+  } = UseFilterMovies(beatFilmMovies, 'beatFilm', false, getMoviesBeatfilm)
 
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(!isLoading), 1000);
-    return () => clearTimeout(timer);
+    setSearchError(false);
+    if (localStorage.getItem("filmMovies")) {
+      setBeatFilmMovies(JSON.parse(localStorage.getItem("filmMovies")));
+    }
   }, []);
 
-  useEffect(() => {
-    setIsSearchError(false);
-    if (localStorage.getItem('beatFilmMovies')) {
-      setBeatFilmMovies((JSON.parse(localStorage.getItem('beatFilmMovies'))));
-    }
-  }, [])
-
-
   function getMoviesBeatfilm() {
-    if (localStorage.getItem('beatFilmMovies')) {
-      setBeatFilmMovies(JSON.parse(localStorage.getItem('beatFilmMovies')));
-      filterMovies(JSON.parse(localStorage.getItem('beatFilmMovies')), inputSearch, short)
+    if (localStorage.getItem("filmMovies")) {
+      setBeatFilmMovies(JSON.parse(localStorage.getItem("filmMovies")));
+      filterMovies(
+        JSON.parse(localStorage.getItem("filmMovies")),
+        inputSearch,
+        short
+      );
     } else {
-      
-      MoviesApi
-      .getInitialMovies()
-        .then(data => {
+      MoviesApi.getInitialMovies()
+        .then((data) => {
           setBeatFilmMovies(data);
-          localStorage.setItem('beatFilmMovies', JSON.stringify(data));
+          localStorage.setItem("filmMovies", JSON.stringify(data));
           filterMovies(data, inputSearch, short);
-          
-        }
-        ).catch(err => {
-          setIsSearchError(true);
-          console.log(err)
         })
-        
+        .catch((err) => {
+          setSearchError(true);
+          console.log(err);
+        });
     }
   }
+
+  const location = useLocation();
+
+  const {
+    displayedMovies,
+    displayMoreMovies,
+  } = useScreenWidthBinding(filteredMovies)
 
 
   return (
     <section className="movies">
-      <SearchForm  
-         onSubmitSearch={onSubmitSearch}
-         short={short}
-         handleChange={handleInputChange}
-         handleShort={handleSwitchShort}
-         inputSearch={inputSearch}  />
-      {!isLoading ? (
-        <Preloader />
-      ) : (
-        <MoviesCardList   short={short}
-        movies={filteredMovies}
-        savedMovies={savedMovies}
-        onMovieSave={onMovieSave}
-        showPreloader={showPreloader}
-        isSearchError={isSearchError}
-        onClicPopupOpen={onClicPopupOpen}
-        isSaved={false} 
+      <SearchForm
+        onSubmitSearch={onSubmitSearch}
+        short={short}
+        handleChange={handleInputChange}
+        handleShort={handleSwitchShort}
+        inputSearch={inputSearch}
+      />
+   
+        <MoviesCardList
+          short={short}
+          movies={filteredMovies}
+          savedMovies={savedMovies}
+          onMovieSave={onMovieSave}
+          showPreloader={showPreloader}
+          searchError={searchError}
+          onClicPopupOpen={onClicPopupOpen}
+          isSaved={false}
+          displayedMovies={displayedMovies}
         />
-      )}
+     
 
-      <button className="movies__next-button">Ещё</button>
-      <Footer />
+     {Boolean(location.pathname === '/movies' & (filteredMovies.length > displayedMovies.length)) &&
+          <button type="button"
+            className="movies__next-button"
+            onClick={displayMoreMovies}
+          >Ещё</button>
+        }
+<Footer />
     </section>
   );
 }
