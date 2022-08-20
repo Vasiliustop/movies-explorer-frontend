@@ -1,6 +1,6 @@
 # movies-explorer-frontend
 
-# Проект - [Димломная работа!](https://vasiliustop.github.io/russian-travel)
+# Проект - [Димломная работа!](https://vasilius.diplom.nomoredomains.xyz)
 
 ## [ссылка на пул реквест ](https://github.com/Vasiliustop/movies-explorer-frontend/pull/2)
 
