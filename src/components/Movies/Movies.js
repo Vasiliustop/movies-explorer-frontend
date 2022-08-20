@@ -1,107 +1,149 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect, useContext } from 'react';
 import SearchForm from "./SearchForm/SearchForm";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import Footer from "./../Footer/Footer";
-import Preloader from "./Preloader/Preloader";
-import * as MoviesApi from "../../utils/MoviesApi";
-import { UseFilterMovies } from "../UseFilterMovies.js";
-import { useScreenWidthBinding } from '../useScreenWidthBinding';
+import { CurrentUserContext } from '../../context/CurrentUserContext';
+import { useLocation } from 'react-router-dom';
+export default function Movies({ loading }) 
 
-export default function Movies({
-  
-  loggedIn,
-  savedMovies,
-  onMovieSave,
-  isMenuOpen,
-  onClicOpen,
-  onClicPopupOpen,
-  onClickCloseMenu,
-}) {
 
-  const [beatFilmMovies, setBeatFilmMovies] = useState([]);
-  const [showPreloader, setShowPreloader] = useState(false);
-  const [searchError, setSearchError] = useState(false);
-
+{
   const {
-    short,
-    filteredMovies,
-    inputSearch,
-    handleSwitchShort,
-    handleInputChange,
-    onSubmitSearch,
-    filterMovies,
-  } = UseFilterMovies(beatFilmMovies, 'beatFilm', false, getMoviesBeatfilm)
-
-
-  useEffect(() => {
-    setSearchError(false);
-    if (localStorage.getItem("filmMovies")) {
-      setBeatFilmMovies(JSON.parse(localStorage.getItem("filmMovies")));
-    }
-  }, []);
-
-  function getMoviesBeatfilm() {
-    if (localStorage.getItem("filmMovies")) {
-      setBeatFilmMovies(JSON.parse(localStorage.getItem("filmMovies")));
-      filterMovies(
-        JSON.parse(localStorage.getItem("filmMovies")),
-        inputSearch,
-        short
-      );
-    } else {
-      MoviesApi.getInitialMovies()
-        .then((data) => {
-          setBeatFilmMovies(data);
-          localStorage.setItem("filmMovies", JSON.stringify(data));
-          filterMovies(data, inputSearch, short);
-        })
-        .catch((err) => {
-          setSearchError(true);
-          console.log(err);
-        });
-    }
-  }
+    cards,
+    handlerSearchForm,
+    searchForm,
+    searchFormDirty,
+    searchFormError,
+    setFormValid,
+    formValid,
+    handleSearchCard,
+    setCards,
+    setSearchInput,
+    setSearchForm,
+    handleCardLike,
+    savedCards,
+    getSavedCard 
+  } = useContext(CurrentUserContext);
 
   const location = useLocation();
 
-  const {
-    displayedMovies,
-    displayMoreMovies,
-  } = useScreenWidthBinding(filteredMovies)
+  useEffect(() => {
+    window.addEventListener("resize", updateWindowWidth);
+    return () => window.removeEventListener("resize", updateWindowWidth);
+  });
+
+  const [movies, setMovies] = useState([]);
+  const [renderedMovies, setRenderedMovies] = useState([]);
+  const [idx, setIdx] = useState(0);
+  const [countMoviesWindow, setCountMoviesWindow] = useState(0)
+  const [winWidth, setWinWidth] = useState(window.innerWidth);
 
 
-  return (
+
+  function updateWindowWidth() {
+    setWinWidth(window.innerWidth);
+  }
+
+  function filterMovies(unmovies) {
+    const searchRequestData = JSON.parse(localStorage.searchRequest);
+    const checkBoxState = searchRequestData.checkBox;
+    const request = searchRequestData.request;
+    return unmovies.filter(movie => {
+      if (checkBoxState === true) {
+        return movie.duration <= 40 && movie.nameRU.toLowerCase().includes(request.toLowerCase());
+      } else {
+        return movie.nameRU.toLowerCase().includes(request.toLowerCase());
+      }
+    });
+  }
+
+  function getMoviesFromLocalStorage() {
+    if (localStorage.getItem('searchRequest') !== null) {
+      const searchRequestData = JSON.parse(localStorage.searchRequest);
+      const movies = filterMovies(searchRequestData.movies);
+      setMovies(movies);
+    } else {
+      return;
+    }
+  }
+
+  function handleSearchSubmit(moviesFromApi) {
+    const movies = filterMovies(moviesFromApi);
+    setRenderedMovies([]);
+    setMovies(movies);
+    setIdx(0);
+  }
+
+  function renderMovies() {
+    if (winWidth > 1154) {
+      setIdx(prev => prev + 3)
+    }
+    else if (winWidth < 768) {
+      setIdx(prev => prev + 2)
+    }
+    const moviesToRender = movies.slice(renderedMovies.length, countMoviesWindow + idx);
+    setRenderedMovies([...renderedMovies, ...moviesToRender]);
+
+  }
+  useEffect(() => {
+    if (winWidth > 1150) {
+      setCountMoviesWindow(12)
+    }
+    if (winWidth < 1150) {
+      setCountMoviesWindow(8)
+    }
+    if (winWidth < 767) {
+      setCountMoviesWindow(5)
+    }
+
+  }, [winWidth])
+
+  useEffect(() => {
+    renderMovies()
+  }, [movies]); 
+
+  useEffect(() => {
+    getMoviesFromLocalStorage();
+    renderMovies();
+    return () => {
+      setMovies([]);
+      setRenderedMovies([]);
+    }
+  }, []); 
+
+
+
+return (
     <section className="movies">
       <SearchForm
-        onSubmitSearch={onSubmitSearch}
-        short={short}
-        handleChange={handleInputChange}
-        handleShort={handleSwitchShort}
-        inputSearch={inputSearch}
+            setRenderedMovies={setRenderedMovies}
+            setSearchForm={setSearchForm}
+            handleSearchSubmit={handleSearchSubmit}
+            setSearchInput={setSearchInput}
+            cards={cards}
+            handlerSearchForm={handlerSearchForm}
+            searchForm={searchForm}
+            searchFormDirty={searchFormDirty}
+            searchFormError={searchFormError}
+            setFormValid={setFormValid}
+            formValid={formValid}
+            setCards={setCards}
+            handleSearchCard={handleSearchCard}
       />
    
         <MoviesCardList
-          short={short}
-          movies={filteredMovies}
-          savedMovies={savedMovies}
-          onMovieSave={onMovieSave}
-          showPreloader={showPreloader}
-          searchError={searchError}
-          onClicPopupOpen={onClicPopupOpen}
-          isSaved={false}
-          displayedMovies={displayedMovies}
+         getSavedCard={getSavedCard} savedCards={savedCards} handleCardLike={handleCardLike} cards={renderedMovies} loading={loading}
         />
      
-
-     {Boolean(location.pathname === '/movies' & (filteredMovies.length > displayedMovies.length)) &&
+     {Boolean(location.pathname === '/movies' & (filterMovies.length > renderMovies.length)) &&
           <button type="button"
             className="movies__next-button"
-            onClick={displayMoreMovies}
+            onClick={renderMovies}
           >Ещё</button>
         }
+
 <Footer />
     </section>
   );
+
 }

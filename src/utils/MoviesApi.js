@@ -18,3 +18,9 @@ export function getInitialMovies() {
     },
   }).then(checkResponse);
 }
+
+
+
+
+
+

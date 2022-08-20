@@ -1,5 +1,5 @@
 const baseUrl = "https://api.vasilius.diplom.nomoredomains.xyz";
-const MOVIES_URL = "https://api.nomoreparties.co";
+
 
 function checkResponse(response) {
   if (response.ok) {
@@ -43,7 +43,7 @@ export function getSavedMovies() {
 }
 
 
-export const saveMovie = (movie) => {
+export const saveMovie = (card) => {
   return fetch(`${baseUrl}/movies`, {
       method: "POST",
       headers: {
@@ -52,17 +52,17 @@ export const saveMovie = (movie) => {
         Authorization: getToken(),
       },
       body: JSON.stringify({
-          country: movie.country,
-          director: movie.director,
-          duration: movie.duration,
-          year: movie.year,
-          description: movie.description,
-          image: `${MOVIES_URL}${movie.image.url}`,
-          trailerLink: movie.trailerLink,
-          thumbnail: `${MOVIES_URL}${movie.image.formats.thumbnail.url}`,
-          nameRU: movie.nameRU,
-          nameEN: movie.nameEN,
-          movieId: movie.id,
+          country: card.country,
+          director: card.director,
+          duration: card.duration,
+          year: card.year,
+          description: card.description,
+          image: `https://api.nomoreparties.co${card.image.url}`,
+          trailerLink: card.trailerLink,
+          thumbnail: `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`,
+          nameRU: card.nameRU,
+          nameEN: card.nameEN,
+          movieId: card.id,
       }),
     }).then(checkResponse);
 };

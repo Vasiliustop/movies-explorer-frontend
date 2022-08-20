@@ -1,62 +1,59 @@
-import React, { useEffect } from "react";
 import MoviesCardList from "../Movies/MoviesCardList/MoviesCardList";
 import SearchForm from "../Movies/SearchForm/SearchForm";
 import Footer from "../Footer/Footer";
-import { UseFilterMovies } from "../UseFilterMovies";
+import { useContext } from 'react';
+import { CurrentUserContext } from '../../context/CurrentUserContext';
 
-export default function SavedMovies({
-  isSaved,
-  loggedIn,
-  movies,
-  isMenuOpen,
-  onClicOpen,
-  onMovieDel,
-  showPreloader,
-  getMovies,
-  isSearchError,
-  onClicPopupOpen,
-  onClickCloseMenu,
-}) {
+export default function SavedMovies({ loading }) {
   const {
-    short,
-    setShort,
-    filteredMovies,
-    updateFilteredMovies,
-    inputSearch,
-    setInputSearch,
-    handleSwitchShort,
-    handleInputChange,
-    onSubmitSearch,
-  } = UseFilterMovies(movies, "saved", true);
+    currentUser,
+    cards,
+    handlerSearchForm,
+    searchForm,
+    searchFormDirty,
+    searchFormError,
+    setFormValid,
+    formValid,
+    handleSearchCard,
+    setCards,
+    setSearchInput,
+    setSearchForm,
+    handleCardLike,
+    savedCards,
+    setSavedCards
+  } = useContext(CurrentUserContext);
 
-  useEffect(() => {
-    getMovies();
-  }, []);
-
-  useEffect(() => {
-    updateFilteredMovies(movies);
-    setShort(false);
-    setInputSearch("");
-  }, [movies]);
+  const savedUserCards = savedCards.filter((value) => currentUser.id === value.owner && value);
+  const resultUserCard = savedUserCards.filter((value) => {
+    if (localStorage.searchRequestSavedMovies != null) {
+      const searchRequestData = JSON.parse(localStorage.searchRequestSavedMovies);
+      const checkBoxState = searchRequestData.checkBox ? searchRequestData.checkBox : false;
+      const request = searchRequestData.request ? searchRequestData.request : '';
+      if (checkBoxState) {
+        return value.duration <= 41 && value.nameRU.toLowerCase().includes(request.toLowerCase());
+      } else {
+        return value.nameRU.toLowerCase().includes(request.toLowerCase());
+      }
+    } else { return savedUserCards }
+  })
 
   return (
     <section className="saved-movies">
-      <SearchForm
-        onSubmitSearch={onSubmitSearch}
-        short={short}
-        handleChange={handleInputChange}
-        handleShort={handleSwitchShort}
-        inputSearch={inputSearch}
+         <SearchForm
+        setSearchForm={setSearchForm}
+        setSearchInput={setSearchInput}
+        cards={cards}
+        handlerSearchForm={handlerSearchForm}
+        searchForm={searchForm}
+        searchFormDirty={searchFormDirty}
+        searchFormError={searchFormError}
+        setFormValid={setFormValid}
+        formValid={formValid}
+        setCards={setCards}
+        handleSearchCard={handleSearchCard}
+        setSavedCards={setSavedCards}
       />
-      <MoviesCardList
-        movies={filteredMovies}
-        short={short}
-        onMovieDel={onMovieDel}
-        showPreloader={showPreloader}
-        isSearchError={isSearchError}
-        onClicPopupOpen={onClicPopupOpen}
-        isSaved={true}
-      />
+    <MoviesCardList handleCardLike={handleCardLike} cards={resultUserCard} loading={loading} />
       <Footer />
     </section>
   );

@@ -1,70 +1,65 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { useLocation } from "react-router-dom";
+import { CurrentUserContext } from "../../../context/CurrentUserContext";
 
+export default function MoviesCard({ card, handleCardLike }) {
+  const { currentUser, savedCards, deleteCard } =
+    useContext(CurrentUserContext);
 
-export default function MoviesCard({ movie, savedMovies, onMovieSave, onMovieDel, onClicPopupOpen }) {
+  const location = useLocation();
 
+  const isSaved = savedCards.some((elem) =>
+    currentUser.id === elem.owner ? elem.movieId === card.id : false
+  );
 
-  const isSaved = savedMovies?.some(i => i.movieId === movie.id)
+  const cardLike = `card__like ${isSaved && "card__like_active"}`;
 
-const location = useLocation();
+  function handleSaveClick(savedCard) {
+    handleCardLike(savedCard);
+  }
 
-
-function handleSaveClick() {
-  onMovieSave(movie);
-}
-
-function handleDelClick() {
-  onMovieDel(movie);
-}
-
-function handlePopupOpen() {
-  onClicPopupOpen(movie)
-}
-
-const cardLikeButtonClassName = `card__like ${
-  isSaved ? "card__like_active" : ""
-}`;
-
-
+  function handleDelClick(card) {
+    deleteCard(card);
+  }
 
   return (
-    <li className="card-movies" key={movie.id}>
+    <li className="card-movies" key={card.id || card.moviesId}>
       <div className="card-movies__description">
         <div className="card-movies__rows">
-          <p className="card-movies__name">{movie.nameRU}</p>
-          {location.pathname === "/movies" ? (
-        <button
-          type="button"
-          className={cardLikeButtonClassName}
-          onClick={handleSaveClick}
-        />
-      ) : (
-        <button
-          aria-label="Delete"
-          type="button"
-          className="card__like card__like_inactive"
-          onClick={handleDelClick}
-        />
-      )}
-    </div>
-        <p className="card-movies__length">{movie.duration}</p>
+          <p className="card-movies__name">{card.nameRU}</p>
+
+          {location.pathname === "/movies" && (
+            <button
+              type="button"
+              className={cardLike}
+              onClick={() => {
+                handleSaveClick(card);
+              }}
+            ></button>
+          )}
+          {location.pathname === "/saved-movies" && (
+            <button
+              type="button"
+              className="card__like card__like_inactive"
+              onClick={() => handleDelClick(card)}
+            ></button>
+          )}
+        </div>
+
+        <p className="card-movies__length">{card.duration}</p>
       </div>
-      
-      <a href={movie.trailerLink} target="_blank" rel="noreferrer">    
-       {location.pathname === "/movies" ? (
-          <img
-            className="card-movies__image"
-            alt={movie.nameRU}
-            src={`https://api.nomoreparties.co${movie.image.url}`}
-          />
-        ) : (
-          <img
-            className="card-movies__image"
-            alt={movie.nameRU}
-            src={movie.image}
-          />
-        )}</a>
+
+      <a href={card.trailerLink} target="_blank" rel="noreferrer">
+        <img
+          src={
+            card.thumbnail
+              ? card.thumbnail
+              : `https://api.nomoreparties.co${card.image.formats.thumbnail.url}`
+          }
+          alt="card.nameRU"
+          className="card-movies__image"
+        />
+      </a>
     </li>
   );
 }
