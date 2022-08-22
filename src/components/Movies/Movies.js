@@ -73,9 +73,9 @@ export default function Movies({ loading }) {
   }
 
   function renderMovies() {
-    if (winWidth > 1154) {
+    if (winWidth > 1150) {
       setIdx((prev) => prev + 3);
-    } else if (winWidth < 768) {
+    } else if (winWidth < 1150) {
       setIdx((prev) => prev + 2);
     }
     const moviesToRender = movies.slice(
@@ -135,10 +135,8 @@ export default function Movies({ loading }) {
         loading={loading}
       />
 
-      {Boolean(
-        (location.pathname === "/movies") &
-          (filterMovies.length > renderMovies.length)
-      ) && (
+  
+ {location.pathname === '/movies' &&  renderedMovies.length < movies.length && (
         <button
           type="button"
           className="movies__next-button"
@@ -146,8 +144,8 @@ export default function Movies({ loading }) {
         >
           Ещё
         </button>
-      )}
-
+         )}
+   
       <Footer />
     </section>
   );

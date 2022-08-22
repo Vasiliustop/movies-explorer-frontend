@@ -46,31 +46,6 @@ export default function Register({onRegister}) {
   }
 
 
-
-
-    // const [state, setState] = useState({
-    //   name: "",
-    //   email: "",
-    //   password: "",
-
-    // });
-  
-    // const handleChange = (evt) => {
-    //   const { name, value } = evt.target;
-    //   setState((prev) => ({
-    //     ...prev,
-    //     [name]: value,
-    //   }));
-    // };
-  
-    // const handleSubmit = (evt) => {
-    //   evt.preventDefault();
-    //   const { name, email, password } = state;
-    //   if (onRegister && name && email && password) {
-    //     onRegister(name, email, password);
-    //   }
-    // };
-  
   return (
     <section className="register">
       <Logo />

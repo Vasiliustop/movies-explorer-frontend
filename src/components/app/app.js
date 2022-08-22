@@ -213,7 +213,6 @@ export default function App() {
      setPopupOpen(false);
   }
 
-
   return (
     <CurrentUserContext.Provider
       value={{

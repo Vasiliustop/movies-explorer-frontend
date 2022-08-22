@@ -12,9 +12,15 @@ export default function MoviesCardList({
     
     <ul className="movies-list">
       <Preloader loading={loading} />
-  {cards.map((card) => (
+
+  {   (cards.length > 0) ? 
+  
+  cards.map((card) => ( 
         <MoviesCard getSavedCard={getSavedCard} savedCards={savedCards} handleCardLike={handleCardLike} card={card} key={card.id || card.movieId} />
-      ))}
+      ))
+      : 
+      <p className="movies-card-list__nothing-found">Ничего не найдено</p>
+  }
     </ul>
   );
 }

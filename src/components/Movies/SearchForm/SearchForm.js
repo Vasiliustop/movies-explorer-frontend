@@ -6,7 +6,6 @@ import { CurrentUserContext } from '../../../context/CurrentUserContext';
 export default function SearchForm({   handleSearchSubmit,
   handlerSearchForm,
   searchForm,
-  searchFormDirty,
   searchFormError,
   setFormValid,
   cards,
@@ -15,8 +14,9 @@ export default function SearchForm({   handleSearchSubmit,
  
     const location = useLocation();
     const { setSearchFormDirty } = useContext(CurrentUserContext);
-  
     const [statusCheckBox, setStatusCheckBox] = useState(false);
+
+    
     useEffect(() => {
       setSearchForm('');
       setSearchFormDirty(false);
@@ -44,14 +44,18 @@ export default function SearchForm({   handleSearchSubmit,
     }
 
     function soldCheckBox(e) {
-      if (location.pathname === '/movies') {
+     
+    if (location.pathname === '/movies') {
         const statusCheckBox = e.target.checked;
         localStorage.setItem('checkBox', JSON.stringify({ "checkBox": statusCheckBox }))
         setStatusCheckBox(statusCheckBox)
-      }
+        setSearchInput(searchForm);
+        localStorage.setItem('searchRequest', JSON.stringify({ "checkBox": statusCheckBox, "request": searchForm, "movies": cards }))
+        handleSearchSubmit(cards, location.pathname);
+    }
       if (location.pathname === '/saved-movies') {
         setStatusCheckBox(e.target.checked)
-      }
+     }
     }
   
     function handleSumbit(e) {
@@ -64,6 +68,7 @@ export default function SearchForm({   handleSearchSubmit,
       if (location.pathname === '/saved-movies') {
         setSearchInput(searchForm);
         localStorage.setItem('searchRequestSavedMovies', JSON.stringify({ "checkBox": statusCheckBox, "request": searchForm, "movies": cards }))
+        
       }
     }
 
@@ -73,18 +78,17 @@ export default function SearchForm({   handleSearchSubmit,
       } else { setFormValid(true) }
     }, [searchFormError, setFormValid])
 
-
   return (
-    <form className="search-form" noValidate onSubmit={handleSumbit}>
+    <form className="search-form" onSubmit={handleSumbit}>
       <fieldset className="form__container">
         <input className="search-form__input" placeholder="Фильм" required name="searchinput" onChange={(e) => { handlerSearchForm(e, location.pathname) }}
-          value={searchForm}/>
+          value={searchForm || ''}/>
         <button className="search-form__button" type="submit">
           Найти
         </button>
       </fieldset>
       <label className="checkbox__label">
-        <input checked={statusCheckBox} onChange={(e) => { soldCheckBox(e) }} id='searchShortMovies' type="checkbox"  className="checkbox" />
+        <input checked={statusCheckBox}  onChange={(e) => { soldCheckBox(e) }} id='searchShortMovies' type="checkbox"  className="checkbox" />
         <span className="checkbox__pseudo"></span>
         Короткометражки
       </label>

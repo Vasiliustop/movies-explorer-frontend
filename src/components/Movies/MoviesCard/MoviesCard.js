@@ -46,7 +46,7 @@ export default function MoviesCard({ card, handleCardLike }) {
           )}
         </div>
 
-        <p className="card-movies__length">{card.duration}</p>
+        <p className="card-movies__length">{(card.duration > 60) ? `${Math.floor(card.duration / 60)}ч ${card.duration % 60}м` : `${card.duration} минут`}</p>
       </div>
 
       <a href={card.trailerLink} target="_blank" rel="noreferrer">
