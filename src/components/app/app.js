@@ -49,6 +49,7 @@ export default function App() {
     
   }, []);
   
+ 
 
   async function handleSearchCard() {
     setLoading(true);
@@ -67,7 +68,13 @@ export default function App() {
 
   function getSavedCard() {
     MainApi.getSavedMovies()
-      .then(setSavedCards)
+    .then((res) => {
+      setSavedCards(res)
+      localStorage.setItem(
+        "saveMoooovie",
+        JSON.stringify({ res })
+      );
+    })
       .catch((e) => {
         throw e;
       });
@@ -124,10 +131,16 @@ export default function App() {
         .then(setCards)
         .catch((e) => console.log(e));
       MainApi.getSavedMovies()
-        .then(setSavedCards)
+      .then((res) => {
+        setSavedCards(res)
+        localStorage.setItem(
+          "saveMoooovie",
+          JSON.stringify(res)
+        );
+      })
         .catch((e) => console.log(e));
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, location]);
 
   function handlerSearchForm(e, route) {
     setSearchForm(e.target.value);

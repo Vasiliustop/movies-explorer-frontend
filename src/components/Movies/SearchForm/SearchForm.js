@@ -13,7 +13,7 @@ export default function SearchForm({   handleSearchSubmit,
   setSearchForm, }) {
  
     const location = useLocation();
-    const { setSearchFormDirty } = useContext(CurrentUserContext);
+    const { setSearchFormDirty, setSavedCards } = useContext(CurrentUserContext);
     const [statusCheckBox, setStatusCheckBox] = useState(false);
 
     
@@ -55,10 +55,35 @@ export default function SearchForm({   handleSearchSubmit,
     }
       if (location.pathname === '/saved-movies') {
         setStatusCheckBox(e.target.checked)
+        const savedMoviess = JSON.parse(localStorage.getItem("saveMoooovie"));
+        if (e.target.checked) {
+          console.log(savedMoviess)
+          const searchResult = asd(
+            savedMoviess,
+            e.target.checked
+          );
+          setSavedCards(searchResult);
+        } else {
+          setSavedCards(savedMoviess);
+        }
      }
     }
   
-    function handleSumbit(e) {
+    function asd(movies, short) {
+      let foundMovies = [];
+      movies.forEach((movie) => {
+          if (short) {
+            movie.duration <= 40 && foundMovies.push(movie);
+          } else {
+            foundMovies.push(movie);
+          }
+      });
+      console.log(foundMovies)
+      return foundMovies;
+    }
+
+
+function handleSumbit(e) {
       e.preventDefault();
       if (location.pathname === '/movies') {
         setSearchInput(searchForm);
