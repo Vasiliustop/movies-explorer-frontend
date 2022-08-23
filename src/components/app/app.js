@@ -46,11 +46,8 @@ export default function App() {
 
   useEffect(() => {
     checkToken();
-    
   }, []);
   
- 
-
   async function handleSearchCard() {
     setLoading(true);
     return await MoviesApi.getInitialMovies()
@@ -217,6 +214,7 @@ export default function App() {
   }
 
   const handleLogout = () => {
+    localStorage.clear();
     localStorage.removeItem("jwt");
     setLoggedIn(false);
     history.push("/");
