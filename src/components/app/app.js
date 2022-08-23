@@ -23,8 +23,6 @@ import * as MainApi from "../../utils/MainApi";
 import * as MoviesApi from "../../utils/MoviesApi";
 import Popup from "../Popup/Popup";
 
-
-
 export default function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
@@ -47,7 +45,7 @@ export default function App() {
   useEffect(() => {
     checkToken();
   }, []);
-  
+
   async function handleSearchCard() {
     setLoading(true);
     return await MoviesApi.getInitialMovies()
@@ -65,13 +63,10 @@ export default function App() {
 
   function getSavedCard() {
     MainApi.getSavedMovies()
-    .then((res) => {
-      setSavedCards(res)
-      localStorage.setItem(
-        "saveMoooovie",
-        JSON.stringify({ res })
-      );
-    })
+      .then((res) => {
+        setSavedCards(res);
+        localStorage.setItem("saveMoooovie", JSON.stringify({ res }));
+      })
       .catch((e) => {
         throw e;
       });
@@ -124,20 +119,22 @@ export default function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      MoviesApi.getInitialMovies()
-        .then(setCards)
-        .catch((e) => console.log(e));
       MainApi.getSavedMovies()
-      .then((res) => {
-        setSavedCards(res)
-        localStorage.setItem(
-          "saveMoooovie",
-          JSON.stringify(res)
-        );
-      })
+        .then((res) => {
+          setSavedCards(res);
+          localStorage.setItem("saveMoooovie", JSON.stringify(res));
+        })
         .catch((e) => console.log(e));
     }
   }, [isLoggedIn, location]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      MoviesApi.getInitialMovies()
+        .then(setCards)
+        .catch((e) => console.log(e));
+    }
+  }, [isLoggedIn]);
 
   function handlerSearchForm(e, route) {
     setSearchForm(e.target.value);
@@ -221,7 +218,7 @@ export default function App() {
   };
 
   function closePopup() {
-     setPopupOpen(false);
+    setPopupOpen(false);
   }
 
   return (
@@ -293,19 +290,16 @@ export default function App() {
           <Header loggedIn={isLoggedIn} />
           <SavedMovies />
         </ProtectedRoute>
-      
-   
 
         <Route path="*">
           <NotFound />
         </Route>
       </Switch>
       <Popup
-          isOpen={popupOpen}
-          isRegisterCompleted={isRegisterCompleted}
-          onClose={closePopup}
-        />
-       
+        isOpen={popupOpen}
+        isRegisterCompleted={isRegisterCompleted}
+        onClose={closePopup}
+      />
     </CurrentUserContext.Provider>
   );
 }
