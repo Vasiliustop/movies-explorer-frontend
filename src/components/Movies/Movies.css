@@ -1,0 +1,36 @@
+.movies__next-button {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  display: block;
+  align-items: center;
+  text-align: center;
+  border: none;
+  background: #F9F9F9;
+  border-radius: 6px;
+  margin: 0 auto;
+  width: 1139px;
+  height: 36px;
+  cursor: pointer;
+}
+
+.movies__next-button_type_closed {
+  display: none;
+}
+
+
+@media screen and (max-width: 1155px) {
+  .movies__next-button  {
+      width: 708px;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .movies__next-button  {
+      width: 300px;
+  }
+
+  
+}
